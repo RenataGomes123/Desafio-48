@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+<head>
+ <title>Criptografia Simples</title>
+ <meta charset="utf-8">
+ <link rel="stylesheet" href="style.css">
+<body>
+ <h1>Criptografia Simples</h1>
+ <label for="mensagem">Mensagem:</label>
+ <input type="text" id="mensagem">
+ <button onclick="criptografarMensagem()">Criptografar</button>
+ <p id="mensagem-criptografada"></p>
+  <script>
+   function criptografar(mensagem) {
+     // Passo 1: Deslocar as letras em 3 posições na tabela ASCII
+     let mensagemCriptografada = "";
+     for (let i = 0; i < mensagem.length; i++) {
+       let codigoAscii = mensagem.charCodeAt(i);
+       if ((codigoAscii >= 65 && codigoAscii <= 87) || (codigoAscii >= 97 && codigoAscii <= 119)) {
+         // Letra maiúscula ou minúscula
+         mensagemCriptografada += String.fromCharCode(codigoAscii + 3);
+       } else if ((codigoAscii >= 88 && codigoAscii <= 90) || (codigoAscii >= 120 && codigoAscii <= 122)) {
+         // Letra maiúscula ou minúscula no final do alfabeto
+         mensagemCriptografada += String.fromCharCode(codigoAscii - 23);
+       } else {
+         // Outro caractere
+         mensagemCriptografada += mensagem.charAt(i);
+       }
+     }
+    
+     // Passo 2: Inverter a linha
+     mensagemCriptografada = mensagemCriptografada.split("").reverse().join("");
+    
+     // Passo 3: Deslocar os caracteres da metade em diante em 1 posição para a esquerda na tabela ASCII
+     let metade = Math.floor(mensagemCriptografada.length / 2);
+     let primeiraMetade = mensagemCriptografada.substring(0, metade);
+     let segundaMetade = mensagemCriptografada.substring(metade);
+     segundaMetade = segundaMetade.split("").map((caractere) => {
+       let codigoAscii = caractere.charCodeAt(0);
+       return String.fromCharCode(codigoAscii - 1);
+     }).join("");
+     mensagemCriptografada = primeiraMetade + segundaMetade;
+    
+     return mensagemCriptografada;
+   }
+
+
+   function criptografarMensagem() {
+     let inputMensagem = document.getElementById("mensagem");
+     let mensagem = inputMensagem.value;
+     let mensagemCriptografada = criptografar(mensagem);
+     let mensagemCriptografadaElemento = document.getElementById("mensagem-criptografada");
+     mensagemCriptografadaElemento.innerText = mensagemCriptografada;
+   }
+ </script>
+</body>
+</html>
